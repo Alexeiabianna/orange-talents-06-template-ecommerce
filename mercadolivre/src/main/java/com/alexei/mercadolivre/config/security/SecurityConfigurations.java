@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -42,12 +43,11 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario").permitAll()
-        .antMatchers(HttpMethod.POST, "/categoria").permitAll()
         .antMatchers(HttpMethod.POST, "/auth").permitAll()
-        .antMatchers("/h2-console").permitAll()
         .anyRequest().authenticated()
         .and().csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
