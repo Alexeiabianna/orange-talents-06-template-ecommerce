@@ -1,8 +1,11 @@
 package com.alexei.mercadolivre.controller.form;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
-import com.alexei.mercadolivre.models.Caracteristicas;
+import com.alexei.mercadolivre.models.Caracteristica;
 import com.alexei.mercadolivre.models.Categoria;
 import com.alexei.mercadolivre.models.Produto;
 
@@ -12,61 +15,57 @@ public class ProdutoForm {
     private BigDecimal valor;
     private Integer quantidade;
     private String descricao;
-    
-    private String caracteristicas;
-    
-    private String categoria;
+
+    private Long idCategoria;
+    private List<CaracteristicaForm> caracteristicas = new ArrayList<>();
 
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
     public Integer getQuantidade() {
         return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public Long getIdCategoria() {
+        return idCategoria;
     }
 
-    public String getCaracteristicas() {
+    public List<CaracteristicaForm> getCaracteristicas() {
         return caracteristicas;
     }
 
-    public void setCaracteristicas(String caracteristicas) {
-        this.caracteristicas = caracteristicas;
+    public boolean isEqualNomeCaracteristica(List<CaracteristicaForm> list) {
+        HashSet<String> checkNome = new HashSet<>();
+
+        for (CaracteristicaForm s : list) {
+            if (!checkNome.add(s.getNome())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public List<Caracteristica> convert() {
+        List<Caracteristica> list = new ArrayList<>();
+
+        caracteristicas.forEach(s -> {
+            list.add(new Caracteristica(s.getNome(), s.getDescricao()));
+        });
+
+        return list;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public Produto toModel(Categoria categoria) {
+        return new Produto(this.nome, this.valor, this.quantidade, this.descricao, this.convert(), categoria);
     }
-
-    public Produto toModel() {
-        return new Produto(nome, valor, quantidade, descricao, caracteristicas, categoria);
-    }    
 
 }

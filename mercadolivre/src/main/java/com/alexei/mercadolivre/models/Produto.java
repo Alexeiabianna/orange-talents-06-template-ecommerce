@@ -2,27 +2,36 @@ package com.alexei.mercadolivre.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Produto {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
     private BigDecimal valor;
     private Integer quantidade;
     private String descricao;
-    
-    private String caracteristicas;
-    
-    private String categoria;
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
+    @Size(min = 3)
+    private List<Caracteristica> caracteristicas = new ArrayList<>();
+
+    @ManyToOne
+    private Categoria categoria;
 
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
@@ -30,15 +39,46 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(String nome, BigDecimal valor, Integer quantidade, String descricao, String caracteristicas,
-            String categoria) {
+    public Produto(String nome, BigDecimal valor, Integer quantidade, String descricao,
+            List<Caracteristica> caracteristicas, Categoria categoria) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
         this.descricao = descricao;
-        this.caracteristicas = caracteristicas;
+        this.caracteristicas.addAll(caracteristicas);
         this.categoria = categoria;
     }
-    
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public List<Caracteristica> getCaracteristicas() {
+        return caracteristicas;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
 }
