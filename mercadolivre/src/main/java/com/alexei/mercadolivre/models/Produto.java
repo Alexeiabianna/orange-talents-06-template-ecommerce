@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Size;
 
 @Entity
 public class Produto {
@@ -27,7 +26,6 @@ public class Produto {
     private String descricao;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
-    @Size(min = 3)
     private List<Caracteristica> caracteristicas = new ArrayList<>();
 
     @ManyToOne

@@ -1,10 +1,14 @@
 package com.alexei.mercadolivre.controller.form;
 
+import javax.validation.constraints.NotBlank;
+
 import com.alexei.mercadolivre.models.Caracteristica;
 
 public class CaracteristicaForm {
 
+    @NotBlank
     private String nome;
+    @NotBlank
     private String descricao;
 
     public CaracteristicaForm() {
