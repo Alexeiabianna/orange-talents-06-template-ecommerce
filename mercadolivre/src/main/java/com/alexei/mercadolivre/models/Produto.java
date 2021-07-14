@@ -3,7 +3,10 @@ package com.alexei.mercadolivre.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,6 +35,9 @@ public class Produto {
     private Categoria categoria;
 
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<ImagemProduto> imagens = new HashSet<>();
 
     @Deprecated
     public Produto() {
@@ -77,6 +83,15 @@ public class Produto {
 
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
+    }
+
+    public void vinculaImagens(Set<String> listaLinks) {
+
+        Set<ImagemProduto> lista = listaLinks.stream().map(link -> new ImagemProduto(this, link))
+                .collect(Collectors.toSet());
+
+        this.imagens.addAll(lista);
+
     }
 
 }
