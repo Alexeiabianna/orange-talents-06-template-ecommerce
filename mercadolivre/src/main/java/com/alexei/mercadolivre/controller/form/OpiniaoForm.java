@@ -22,9 +22,6 @@ public class OpiniaoForm {
     @NotBlank @Size(max = 500)
     private String descricao;
 
-    @NotNull
-    private Long idUsuario;
-
     public Integer getNota() {
         return nota;
     }
@@ -39,10 +36,6 @@ public class OpiniaoForm {
 
     public Opiniao toModel(Usuario usuario, Produto produto) {
         return new Opiniao(this.nota, this.titulo, this.descricao, usuario, produto);
-    }
-
-    public Long getIdUsuario() {
-        return idUsuario;
     }
 
 }

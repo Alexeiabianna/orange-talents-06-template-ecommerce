@@ -14,6 +14,8 @@ import com.alexei.mercadolivre.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +39,10 @@ public class OpiniaoController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> cria(@PathVariable Long id, @RequestBody @Valid OpiniaoForm form) {
+    public ResponseEntity<?> cria(@PathVariable Long id, @AuthenticationPrincipal Usuario user, @RequestBody @Valid OpiniaoForm form) {
        Optional<Produto> optionalProduto = produtoRepository.findById(id);
-       Optional<Usuario> optionalUsuario = usuarioRepository.findById(form.getIdUsuario());
-       if(optionalProduto.isPresent()) {
+       Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(user.getUsername());
+       if(optionalProduto.isPresent() && optionalUsuario.isPresent()) {
            Produto produto = optionalProduto.get();
            Usuario usuario = optionalUsuario.get();
            Opiniao opiniao = form.toModel(usuario, produto);
