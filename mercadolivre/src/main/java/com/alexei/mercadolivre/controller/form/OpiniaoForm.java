@@ -6,6 +6,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.alexei.mercadolivre.models.Opiniao;
+import com.alexei.mercadolivre.models.Produto;
+import com.alexei.mercadolivre.models.Usuario;
+
 public class OpiniaoForm {
 
     @NotNull
@@ -19,7 +23,7 @@ public class OpiniaoForm {
     private String descricao;
 
     @NotNull
-    private Long idProduto;
+    private Long idUsuario;
 
     public Integer getNota() {
         return nota;
@@ -33,8 +37,12 @@ public class OpiniaoForm {
         return descricao;
     }
 
-    public Long getIdProduto() {
-        return idProduto;
+    public Opiniao toModel(Usuario usuario, Produto produto) {
+        return new Opiniao(this.nota, this.titulo, this.descricao, usuario, produto);
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
 }
