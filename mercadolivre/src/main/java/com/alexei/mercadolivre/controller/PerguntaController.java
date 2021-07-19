@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.alexei.mercadolivre.controller.form.EnviaEmail;
 import com.alexei.mercadolivre.controller.form.PerguntaForm;
 import com.alexei.mercadolivre.models.Pergunta;
 import com.alexei.mercadolivre.models.Produto;
@@ -28,13 +29,15 @@ public class PerguntaController {
     private PerguntaRepository perguntaRepository;
     private ProdutoRepository produtoRepository;
     private UsuarioRepository usuarioRepository;
+    private EnviaEmail enviaEmail;
 
     @Autowired
     public PerguntaController(PerguntaRepository perguntaRepository, ProdutoRepository produtoRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository, EnviaEmail enviaEmail) {
         this.perguntaRepository = perguntaRepository;
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.enviaEmail = enviaEmail;
     }
 
     @PostMapping("{id}")
@@ -48,6 +51,9 @@ public class PerguntaController {
 
             Pergunta pergunta = form.toModel(usuario, produto);
             perguntaRepository.save(pergunta);
+
+            enviaEmail.enviaEmail(form.getMensagem(), usuario);
+            
             return ResponseEntity.ok().body(form);
         }
 
