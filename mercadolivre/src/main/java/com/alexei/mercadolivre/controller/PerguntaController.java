@@ -4,11 +4,11 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.OpiniaoForm;
-import com.alexei.mercadolivre.models.Opiniao;
+import com.alexei.mercadolivre.controller.form.PerguntaForm;
+import com.alexei.mercadolivre.models.Pergunta;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.models.Usuario;
-import com.alexei.mercadolivre.repository.OpiniaoRepository;
+import com.alexei.mercadolivre.repository.PerguntaRepository;
 import com.alexei.mercadolivre.repository.ProdutoRepository;
 import com.alexei.mercadolivre.repository.UsuarioRepository;
 
@@ -22,33 +22,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/opiniao")
-public class OpiniaoController {
+@RequestMapping("/pergunta")
+public class PerguntaController {
 
-    private OpiniaoRepository opiniaoRepository;
-    private UsuarioRepository usuarioRepository;
+    private PerguntaRepository perguntaRepository;
     private ProdutoRepository produtoRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
-    public OpiniaoController(OpiniaoRepository opiniaoRepository, UsuarioRepository usuarioRepository,
-            ProdutoRepository produtoRepository) {
-        this.opiniaoRepository = opiniaoRepository;
-        this.usuarioRepository = usuarioRepository;
+    public PerguntaController(PerguntaRepository perguntaRepository, ProdutoRepository produtoRepository,
+            UsuarioRepository usuarioRepository) {
+        this.perguntaRepository = perguntaRepository;
         this.produtoRepository = produtoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> cria(@PathVariable Long id, @AuthenticationPrincipal Usuario user,
-            @RequestBody @Valid OpiniaoForm form) {
-        Optional<Produto> optionalProduto = produtoRepository.findById(id);
+    @PostMapping("{id}")
+    public ResponseEntity<?> cria(@PathVariable Long id, @RequestBody @Valid PerguntaForm form,
+            @AuthenticationPrincipal Usuario user) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(user.getUsername());
-        if (optionalProduto.isPresent() && optionalUsuario.isPresent()) {
-            Produto produto = optionalProduto.get();
+        Optional<Produto> optionalProduto = produtoRepository.findById(id);
+        if (optionalProduto.isPresent() && optionalProduto.isPresent()) {
             Usuario usuario = optionalUsuario.get();
-            Opiniao opiniao = form.toModel(usuario, produto);
-            opiniaoRepository.save(opiniao);
+            Produto produto = optionalProduto.get();
 
-            return ResponseEntity.ok().body(opiniao);
+            Pergunta pergunta = form.toModel(usuario, produto);
+            perguntaRepository.save(pergunta);
+            return ResponseEntity.ok().body(form);
         }
 
         return ResponseEntity.badRequest().build();
