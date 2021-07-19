@@ -52,7 +52,7 @@ public class PerguntaController {
             Pergunta pergunta = form.toModel(usuario, produto);
             perguntaRepository.save(pergunta);
 
-            enviaEmail.enviaEmail(form.getMensagem(), usuario);
+            enviaEmail.enviaEmail(pergunta, usuario);
             
             return ResponseEntity.ok().body(form);
         }
