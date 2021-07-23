@@ -48,7 +48,7 @@ public class OpiniaoController {
             Opiniao opiniao = form.toModel(usuario, produto);
             opiniaoRepository.save(opiniao);
 
-            return ResponseEntity.ok().body(opiniao);
+            return ResponseEntity.ok().body(form);
         }
 
         return ResponseEntity.badRequest().build();

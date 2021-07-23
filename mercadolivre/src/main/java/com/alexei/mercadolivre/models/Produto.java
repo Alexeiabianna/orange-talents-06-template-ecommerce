@@ -3,9 +3,13 @@ package com.alexei.mercadolivre.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -15,6 +19,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.validation.constraints.Size;
+
+import com.alexei.mercadolivre.controller.form.CaracteristicaForm;
 
 @Entity
 public class Produto {
@@ -27,30 +35,37 @@ public class Produto {
     private BigDecimal valor;
     private Integer quantidade;
     private String descricao;
-
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
-    private List<Caracteristica> caracteristicas = new ArrayList<>();
+    private LocalDateTime dataCriacao = LocalDateTime.now();
 
     @ManyToOne
     private Categoria categoria;
 
-    private LocalDateTime dataCriacao = LocalDateTime.now();
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
+    private Set<Caracteristica> caracteristicas = new HashSet<>();
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
-    private Set<ImagemProduto> imagens = new HashSet<>();
+    private List<ImagemProduto> imagens = new ArrayList<>();
+
+    @OneToMany(mappedBy = "produto")
+    @OrderBy("titulo asc")
+    private SortedSet<Pergunta> perguntas = new TreeSet<>();
+    
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Opiniao> opinioes = new HashSet<>();
 
     @Deprecated
     public Produto() {
     }
 
     public Produto(String nome, BigDecimal valor, Integer quantidade, String descricao,
-            List<Caracteristica> caracteristicas, Categoria categoria) {
+            @Size(min = 3) Collection<CaracteristicaForm> caracteristicas, Categoria categoria) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
         this.descricao = descricao;
-        this.caracteristicas.addAll(caracteristicas);
         this.categoria = categoria;
+        this.caracteristicas.addAll(caracteristicas.stream().map(caracteristica -> caracteristica.toModel(this))
+                .collect(Collectors.toSet()));
     }
 
     public Long getId() {
@@ -73,8 +88,8 @@ public class Produto {
         return descricao;
     }
 
-    public List<Caracteristica> getCaracteristicas() {
-        return caracteristicas;
+    public Set<Caracteristica> getCaracteristicas() {
+        return this.caracteristicas;
     }
 
     public Categoria getCategoria() {
@@ -85,13 +100,29 @@ public class Produto {
         return dataCriacao;
     }
 
-    public void vinculaImagens(Set<String> listaLinks) {
+    public <T> List<T> mapeiaCaracteristicas(Function<Caracteristica, T> funcaoMapeadora) {
+        return this.caracteristicas.stream().map(funcaoMapeadora).collect(Collectors.toList());
+    }
 
-        Set<ImagemProduto> lista = listaLinks.stream().map(link -> new ImagemProduto(this, link))
-                .collect(Collectors.toSet());
+    public <T> List<T> mapeiaImagens(Function<ImagemProduto, T> funcaoMapeadora) {
+        return this.imagens.stream().map(funcaoMapeadora).collect(Collectors.toList());
+    }
 
-        this.imagens.addAll(lista);
+    public <T extends Comparable<T>> SortedSet<T> mapeiaPerguntas(Function<Pergunta, T> funcaoMapeadora) {
+        return this.perguntas.stream().map(funcaoMapeadora).collect(Collectors.toCollection(TreeSet :: new));
+    }
 
+    public <T> Set<T> mapeiaOpiniao(Function<Opiniao, T> funcaoMapeadora) {
+        return this.opinioes.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+    }
+
+
+    
+    public void addImagem(List<String> links) {
+        List<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link))
+                .collect(Collectors.toList());
+
+        this.imagens.addAll(imagens);
     }
 
 }

@@ -21,9 +21,10 @@ public class Caracteristica {
     public Caracteristica() {
     }
 
-    public Caracteristica(String nome, String descricao) {
+    public Caracteristica(String nome, String descricao, Produto produto) {
         this.nome = nome;
         this.descricao = descricao;
+        this.produto = produto;
     }
 
     public Long getId() {

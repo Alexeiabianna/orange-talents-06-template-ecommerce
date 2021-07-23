@@ -25,13 +25,12 @@ public class DetalhesProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetalhesDto> detalha(@PathVariable Long id) {
+    public ResponseEntity<?> detalha(@PathVariable Long id) {
         
         Optional<Produto> optionalProduto = produtoRepository.findById(id);
         if(optionalProduto.isPresent()) {
             Produto produto = optionalProduto.get();
-            DetalhesDto detalhes = new DetalhesDto(produto);
-            return ResponseEntity.ok().body(detalhes);
+            return ResponseEntity.ok().body(new DetalhesDto(produto));
         }
 
         return ResponseEntity.badRequest().build();

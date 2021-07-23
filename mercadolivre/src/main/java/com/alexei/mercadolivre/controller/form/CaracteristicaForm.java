@@ -3,6 +3,7 @@ package com.alexei.mercadolivre.controller.form;
 import javax.validation.constraints.NotBlank;
 
 import com.alexei.mercadolivre.models.Caracteristica;
+import com.alexei.mercadolivre.models.Produto;
 
 public class CaracteristicaForm {
 
@@ -27,8 +28,7 @@ public class CaracteristicaForm {
         return descricao;
     }
 
-    public Caracteristica toModel() {
-        return new Caracteristica(this.nome, this.descricao);
+    public Caracteristica toModel(Produto produto) {
+        return new Caracteristica(nome, descricao, produto);
     }
-    
 }

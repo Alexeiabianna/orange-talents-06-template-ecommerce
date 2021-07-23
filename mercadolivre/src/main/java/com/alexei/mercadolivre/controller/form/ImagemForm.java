@@ -3,7 +3,6 @@ package com.alexei.mercadolivre.controller.form;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,12 +19,7 @@ public class ImagemForm {
         return imagens;
     }
 
-    public Set<String> getLinks() {
-
-        String servidorImagens = "http://servidorimagens.com.br/upload";
-        
-        return this.imagens.stream().map(imagem -> servidorImagens + imagem.getOriginalFilename())
-                .collect(Collectors.toSet());
+    public void setImagens(Set<MultipartFile> imagens) {
+        this.imagens.addAll(imagens);
     }
-
 }

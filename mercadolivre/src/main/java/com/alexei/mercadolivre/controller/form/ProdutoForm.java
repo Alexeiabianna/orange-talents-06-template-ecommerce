@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-import com.alexei.mercadolivre.models.Caracteristica;
 import com.alexei.mercadolivre.models.Categoria;
 import com.alexei.mercadolivre.models.Produto;
 
@@ -21,10 +20,12 @@ public class ProdutoForm {
     @NotBlank
     private String nome;
 
-    @Positive @NotNull
+    @Positive
+    @NotNull
     private BigDecimal valor;
 
-    @Positive @NotNull
+    @Positive
+    @NotNull
     private Integer quantidade;
 
     @Length(max = 1000)
@@ -32,7 +33,7 @@ public class ProdutoForm {
 
     @NotNull
     private Long idCategoria;
-    
+
     @Size(min = 3)
     private List<CaracteristicaForm> caracteristicas = new ArrayList<>();
 
@@ -71,18 +72,8 @@ public class ProdutoForm {
         return false;
     }
 
-    public List<Caracteristica> convert() {
-        List<Caracteristica> list = new ArrayList<>();
-
-        caracteristicas.forEach(s -> {
-            list.add(new Caracteristica(s.getNome(), s.getDescricao()));
-        });
-
-        return list;
-    }
-
     public Produto toModel(Categoria categoria) {
-        return new Produto(this.nome, this.valor, this.quantidade, this.descricao, this.convert(), categoria);
+        return new Produto(this.nome, this.valor, this.quantidade, this.descricao, this.caracteristicas, categoria);
     }
 
 }
