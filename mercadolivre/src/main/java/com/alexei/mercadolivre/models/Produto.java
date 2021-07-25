@@ -116,7 +116,9 @@ public class Produto {
         return this.opinioes.stream().map(funcaoMapeadora).collect(Collectors.toSet());
     }
 
-
+    public void setQuantidade(int quantidade) {
+        this.quantidade = this.quantidade - quantidade;
+    }
     
     public void addImagem(List<String> links) {
         List<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link))
