@@ -1,4 +1,4 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller.form.compra;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller.form.produto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 
 import com.alexei.mercadolivre.models.Categoria;
 import com.alexei.mercadolivre.models.Produto;
+import com.alexei.mercadolivre.models.Usuario;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -72,8 +73,8 @@ public class ProdutoForm {
         return false;
     }
 
-    public Produto toModel(Categoria categoria) {
-        return new Produto(this.nome, this.valor, this.quantidade, this.descricao, this.caracteristicas, categoria);
+    public Produto toModel(Categoria categoria, Usuario vendedor) {
+        return new Produto(this.nome, this.valor, this.quantidade, this.descricao, this.caracteristicas, categoria, vendedor);
     }
 
 }

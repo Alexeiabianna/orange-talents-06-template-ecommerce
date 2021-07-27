@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import com.alexei.mercadolivre.config.security.TokenService;
 import com.alexei.mercadolivre.controller.dto.TokenDto;
-import com.alexei.mercadolivre.controller.form.LoginForm;
+import com.alexei.mercadolivre.controller.form.usuario.LoginForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

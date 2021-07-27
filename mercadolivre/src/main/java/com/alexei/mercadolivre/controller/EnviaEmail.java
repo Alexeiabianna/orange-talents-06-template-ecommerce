@@ -1,4 +1,4 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller;
 
 import com.alexei.mercadolivre.models.Pergunta;
 import com.alexei.mercadolivre.models.Produto;

@@ -1,4 +1,4 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller.form.produto;
 
 import java.util.ArrayList;
 import java.util.List;

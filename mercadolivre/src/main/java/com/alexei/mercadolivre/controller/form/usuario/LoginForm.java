@@ -1,4 +1,4 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller.form.usuario;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

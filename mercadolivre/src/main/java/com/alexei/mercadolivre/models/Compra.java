@@ -1,7 +1,11 @@
 package com.alexei.mercadolivre.models;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,8 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import com.alexei.mercadolivre.controller.form.TipoGateway;
+import com.alexei.mercadolivre.controller.form.compra.RespostaGateway;
+import com.alexei.mercadolivre.controller.form.compra.TipoGateway;
+
+import io.jsonwebtoken.lang.Assert;
 
 @Entity
 public class Compra {
@@ -21,10 +29,10 @@ public class Compra {
 
     private Integer quantidade;
     private BigDecimal valor;
-    
+
     @Enumerated(EnumType.STRING)
     private TipoGateway tipoPagamento;
-    
+
     @Enumerated(EnumType.STRING)
     private StatusCompra status;
 
@@ -33,7 +41,10 @@ public class Compra {
 
     @ManyToOne
     private Usuario comprador;
-    
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+    private Set<Transacao> transacoes = new HashSet<>();
+
     @Deprecated
     public Compra() {
     }
@@ -49,7 +60,7 @@ public class Compra {
     }
 
     private TipoGateway selectGateway(Integer tipoPagamento) {
-        if(tipoPagamento.equals(0)) {
+        if (tipoPagamento.equals(0)) {
             return TipoGateway.PAGSEGURO;
         }
         return TipoGateway.PAYPAL;
@@ -81,8 +92,8 @@ public class Compra {
 
     public StatusCompra getStatus() {
         return status;
-    }    
-    
+    }
+
     public boolean isValidEstoque(Integer quantidade) {
         return this.produto.getQuantidade() > quantidade;
     }
@@ -90,4 +101,26 @@ public class Compra {
     public void updateEstoque() {
         this.produto.setQuantidade(quantidade);
     }
+
+    public void addTransacao(RespostaGateway respostaGateway) {
+        Transacao transacao = respostaGateway.toModel(this);
+        Assert.isTrue(!this.transacoes.contains(transacao), "Essa transacao já foi registrada" + transacao);
+
+        this.transacoes.add(transacao);
+
+    }
+
+    private Set<Transacao> transacoesConcluidas() {
+        Set<Transacao> transacoesConcluidas = this.transacoes.stream().filter(Transacao::isSucesso)
+                .collect(Collectors.toSet());
+
+        Assert.isTrue(transacoesConcluidas.size() <= 1, "Compra com mais de uma transacao concluida");
+
+        return transacoesConcluidas;
+    }
+
+    public boolean isConcluida() {
+        return !transacoesConcluidas().isEmpty();
+    }
+
 }

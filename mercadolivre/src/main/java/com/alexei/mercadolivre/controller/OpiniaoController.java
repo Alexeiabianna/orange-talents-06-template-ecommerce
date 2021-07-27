@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.OpiniaoForm;
+import com.alexei.mercadolivre.controller.form.produto.OpiniaoForm;
 import com.alexei.mercadolivre.models.Opiniao;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.models.Usuario;

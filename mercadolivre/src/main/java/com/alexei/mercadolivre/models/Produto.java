@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.validation.constraints.Size;
 
-import com.alexei.mercadolivre.controller.form.CaracteristicaForm;
+import com.alexei.mercadolivre.controller.form.produto.CaracteristicaForm;
 
 @Entity
 public class Produto {
@@ -53,17 +53,21 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<Opiniao> opinioes = new HashSet<>();
 
+    @ManyToOne
+    private Usuario vendedor;
+
     @Deprecated
     public Produto() {
     }
 
     public Produto(String nome, BigDecimal valor, Integer quantidade, String descricao,
-            @Size(min = 3) Collection<CaracteristicaForm> caracteristicas, Categoria categoria) {
+            @Size(min = 3) Collection<CaracteristicaForm> caracteristicas, Categoria categoria, Usuario vendedor) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.vendedor = vendedor;
         this.caracteristicas.addAll(caracteristicas.stream().map(caracteristica -> caracteristica.toModel(this))
                 .collect(Collectors.toSet()));
     }
@@ -125,6 +129,10 @@ public class Produto {
                 .collect(Collectors.toList());
 
         this.imagens.addAll(imagens);
+    }
+
+    public Usuario getVendedor() {
+        return vendedor;
     }
 
 }

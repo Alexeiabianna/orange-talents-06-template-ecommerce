@@ -1,5 +1,6 @@
-package com.alexei.mercadolivre.controller.form;
+package com.alexei.mercadolivre.controller.form.produto;
 
+import com.alexei.mercadolivre.controller.EnviaEmail;
 import com.alexei.mercadolivre.models.Pergunta;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.models.Usuario;

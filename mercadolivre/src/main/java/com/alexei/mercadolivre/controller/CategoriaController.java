@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.CategoriaForm;
+import com.alexei.mercadolivre.controller.form.produto.CategoriaForm;
 import com.alexei.mercadolivre.models.Categoria;
 import com.alexei.mercadolivre.repository.CategoriaRepository;
 

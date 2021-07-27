@@ -2,7 +2,7 @@ package com.alexei.mercadolivre.controller;
 
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.UsuarioForm;
+import com.alexei.mercadolivre.controller.form.usuario.UsuarioForm;
 import com.alexei.mercadolivre.models.Usuario;
 import com.alexei.mercadolivre.repository.UsuarioRepository;
 

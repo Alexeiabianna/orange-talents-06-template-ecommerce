@@ -5,8 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.alexei.mercadolivre.config.validation.ErroDeFormularioDto;
-import com.alexei.mercadolivre.controller.form.CompraForm;
-import com.alexei.mercadolivre.controller.form.EnviaEmail;
+import com.alexei.mercadolivre.controller.form.compra.CompraForm;
 import com.alexei.mercadolivre.models.Compra;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.models.Usuario;
@@ -40,7 +39,6 @@ public class CompraController {
 
     @PostMapping
     public ResponseEntity<?> postMethodName(@RequestBody @Valid CompraForm form, @AuthenticationPrincipal Usuario user) { 
-        System.out.println("Usuario Logado: " + user.getEmail());
         
         if(!produtoRepository.existsById(form.getIdProduto())) {
             return ResponseEntity.badRequest().body(new ErroDeFormularioDto("produto", "inexistente"));

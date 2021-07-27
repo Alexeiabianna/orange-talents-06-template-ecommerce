@@ -6,9 +6,9 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.GeraLinkImagem;
-import com.alexei.mercadolivre.controller.form.ImagemForm;
-import com.alexei.mercadolivre.controller.form.UploaderImagens;
+import com.alexei.mercadolivre.controller.form.produto.GeraLinkImagem;
+import com.alexei.mercadolivre.controller.form.produto.ImagemForm;
+import com.alexei.mercadolivre.controller.form.produto.UploaderImagens;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.repository.ProdutoRepository;
 

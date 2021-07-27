@@ -4,8 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.alexei.mercadolivre.controller.form.EnviaEmail;
-import com.alexei.mercadolivre.controller.form.PerguntaForm;
+import com.alexei.mercadolivre.controller.form.produto.PerguntaForm;
 import com.alexei.mercadolivre.models.Pergunta;
 import com.alexei.mercadolivre.models.Produto;
 import com.alexei.mercadolivre.models.Usuario;
